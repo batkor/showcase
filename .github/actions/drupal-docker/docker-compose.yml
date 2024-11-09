@@ -1,0 +1,58 @@
+services:
+  php:
+    image: wodby/drupal-php:$PHP_TAG
+    container_name: "${PROJECT_NAME}_php"
+    # This fixed permissions issues caused in GitHub Actions.
+    # GHA has UID 1001, but D4D uses 1000. It results that d4d containers can't write anything to cloned files.
+    user: root
+    environment:
+      # This parameter will pass .env contents to PHP container. This is
+      # required by settings.php file.
+      PHP_FPM_CLEAR_ENV: "no"
+      # PHPUnit Drupal testing configurations
+      SIMPLETEST_BASE_URL: "http://nginx"
+      SIMPLETEST_DB: "sqlite://localhost//mnt/files/test.sqlite"
+      MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","goog:chromeOptions":{"args":["--disable-gpu","--headless"]}}, "http://chrome:9515"]'
+      # docker compose up -d --no-deps --build php
+      # This will allow to run tests without 'sudo'.
+      PHP_FPM_USER: wodby
+      PHP_FPM_GROUP: wodby
+    volumes:
+      - ./:/var/www/html:cached
+
+  mariadb:
+    image: wodby/mariadb:$MARIADB_TAG
+    container_name: "${PROJECT_NAME}_mariadb"
+    stop_grace_period: 30s
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+      MYSQL_DATABASE: $DB_NAME
+      MYSQL_USER: $DB_USER
+      MYSQL_PASSWORD: $DB_PASSWORD
+
+  nginx:
+    image: wodby/nginx:$NGINX_TAG
+    container_name: "${PROJECT_NAME}_nginx"
+    depends_on:
+      - php
+    environment:
+      NGINX_STATIC_OPEN_FILE_CACHE: "off"
+      NGINX_ERROR_LOG_LEVEL: debug
+      NGINX_BACKEND_HOST: php
+      NGINX_SERVER_ROOT: /var/www/html/web
+      NGINX_VHOST_PRESET: $NGINX_VHOST_PRESET
+    volumes:
+      - ./:/var/www/html:cached
+
+  chrome:
+    image: selenium/standalone-chrome:$SELENIUM_CHROME_TAG
+    container_name: "${PROJECT_NAME}_chrome"
+    volumes:
+      - /dev/shm:/dev/shm
+    entrypoint:
+      - chromedriver
+      - "--no-sandbox"
+      - "--disable-dev-shm-usage"
+      - "--log-path=/tmp/chromedriver.log"
+      - "--verbose"
+      - "--whitelisted-ips="

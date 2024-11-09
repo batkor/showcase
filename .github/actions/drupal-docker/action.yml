@@ -1,0 +1,15 @@
+name: 'Drupal docker'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Copy files for environment
+      shell: bash
+      run: |
+        mkdir -p ./web/sites/default
+        cp ./.github/actions/drupal-docker/.env ./.env
+        cp ./.github/actions/drupal-docker/docker-compose.yml ./docker-compose.yml
+
+    - name: Run docker
+      shell: bash
+      run: ls -la ./
