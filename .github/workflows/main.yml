@@ -18,7 +18,7 @@ jobs:
           path: './modules/custom'
 
       - name: Prepare environment
-        uses: './.github/actions/drupal-docker'
+        uses: './modules/custom/.github/actions/drupal-docker'
 
       - name: Finished
         run: ls -la ./
