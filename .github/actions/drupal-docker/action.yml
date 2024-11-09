@@ -6,6 +6,7 @@ runs:
     - name: Copy files for environment
       shell: bash
       run: |
+        ls -la ./
         mkdir -p ./web/sites/default
         cp ./.github/actions/drupal-docker/.env ./.env
         cp ./.github/actions/drupal-docker/docker-compose.yml ./docker-compose.yml
