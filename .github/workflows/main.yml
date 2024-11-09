@@ -12,13 +12,13 @@ jobs:
     name: Run PHPUnit
     runs-on: ubuntu-latest
     steps:
-      - name: Prepare environment
-        uses: './.github/actions/drupal-docker'
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
           path: './modules/custom'
+
+      - name: Prepare environment
+        uses: './.github/actions/drupal-docker'
 
       - name: Finished
         run: ls -la ./
