@@ -17,13 +17,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          path: $PATH
+          path: ${{ env.PATH }}
 
       - name: Run echo
         run: ls -la ./
 
       - name: Prepare environment
-        uses: $PATH/.github/actions/drupal-docker
+        uses: ${{ env.PATH }}/.github/actions/drupal-docker
 
       - name: Run echo
         run: ls -la ./modules/custom
