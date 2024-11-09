@@ -14,9 +14,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+        with:
+          path: './modules/custom'
       - name: Prepare environment
         uses: ./.github/actions/drupal-docker
 
       - name: Run echo
-        run: echo "Hello, world!"
+        run: ls -la ./modules/custom
