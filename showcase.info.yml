@@ -1,0 +1,5 @@
+name: 'Showcase'
+type: module
+description: 'Provides support Front Matter on twig templates.'
+package: Showcase
+core_version_requirement: ^10

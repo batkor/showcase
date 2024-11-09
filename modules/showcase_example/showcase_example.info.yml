@@ -1,0 +1,7 @@
+name: 'Showcase example'
+type: module
+description: 'Provides examples use showcase module.'
+package: Showcase
+core_version_requirement: ^10 || ^11
+dependencies:
+  - showcase:showcase
