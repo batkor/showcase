@@ -11,17 +11,19 @@ jobs:
   phpunit:
     name: Run PHPUnit
     runs-on: ubuntu-latest
+    env:
+      PATH: './modules/custom'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          path: './modules/custom'
+          path: $PATH
 
       - name: Run echo
         run: ls -la ./
 
       - name: Prepare environment
-        uses: ./.github/actions/drupal-docker
+        uses: $PATH/.github/actions/drupal-docker
 
       - name: Run echo
         run: ls -la ./modules/custom
