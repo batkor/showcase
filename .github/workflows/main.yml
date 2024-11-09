@@ -14,13 +14,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          path: './modules/custom'
 
       - name: Prepare environment
-        uses: './modules/custom/.github/actions/drupal-docker'
-        with:
-          directory: './modules/custom'
+        uses: './.github/actions/drupal-docker'
+#        with:
+#          directory: './web/modules/custom'
 
       - name: Finished
         run: ls -la ./

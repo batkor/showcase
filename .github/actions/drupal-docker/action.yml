@@ -1,9 +1,9 @@
 name: 'Drupal docker'
 
-inputs:
-  directory:
-    description: 'Repository directory'
-    required: true
+#inputs:
+#  directory:
+#    description: 'Repository directory'
+#    required: true
 
 runs:
   using: "composite"
@@ -12,9 +12,13 @@ runs:
       shell: bash
       run: |
         mkdir -p ./web/sites/default
-        cp ./${{ inputs.directory }}/.github/actions/drupal-docker/.env ./.env
-        cp ./${{ inputs.directory }}/.github/actions/drupal-docker/docker-compose.yml ./docker-compose.yml
+        cp ./.github/actions/drupal-docker/.env ./.env
+        cp ./.github/actions/drupal-docker/docker-compose.yml ./docker-compose.yml
 
-    - name: Run docker
+#    - name: Run docker
+#      shell: bash
+#      run: docker compose up -d
+
+    - name: Fetch Drupal
       shell: bash
-      run: ls -la ./
+      run: git clone --branch 10.3.7 --single-branch https://git.drupalcode.org/project/drupal.git ./code
