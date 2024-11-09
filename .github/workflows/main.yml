@@ -20,5 +20,9 @@ jobs:
 #        with:
 #          directory: './web/modules/custom'
 
+      - name: Run Drupal docker
+        shell: bash
+        run: docker compose up -d
+
       - name: Finished
         run: ls -la ./

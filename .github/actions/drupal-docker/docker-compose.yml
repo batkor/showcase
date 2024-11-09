@@ -18,7 +18,7 @@ services:
       PHP_FPM_USER: wodby
       PHP_FPM_GROUP: wodby
     volumes:
-      - ./:/var/www/html:cached
+      - ./code:/var/www/html:cached
 
   mariadb:
     image: wodby/mariadb:$MARIADB_TAG
@@ -42,7 +42,7 @@ services:
       NGINX_SERVER_ROOT: /var/www/html/web
       NGINX_VHOST_PRESET: $NGINX_VHOST_PRESET
     volumes:
-      - ./:/var/www/html:cached
+      - ./code:/var/www/html:cached
 
   chrome:
     image: selenium/standalone-chrome:$SELENIUM_CHROME_TAG

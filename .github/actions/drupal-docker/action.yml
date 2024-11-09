@@ -15,10 +15,7 @@ runs:
         cp ./.github/actions/drupal-docker/.env ./.env
         cp ./.github/actions/drupal-docker/docker-compose.yml ./docker-compose.yml
 
-#    - name: Run docker
-#      shell: bash
-#      run: docker compose up -d
-
     - name: Fetch Drupal
       shell: bash
       run: git clone --branch 10.3.7 --single-branch https://git.drupalcode.org/project/drupal.git ./code
+
