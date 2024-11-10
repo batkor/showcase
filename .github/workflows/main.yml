@@ -35,11 +35,15 @@ jobs:
         shell: bash
         run: docker compose exec -T php composer install
 
+      - name: Update permissions
+        shell: bash
+        run: |
+          docker compose exec -T --user=0 php chmod 777 /mnt/files -R
+
       - name: Check
         shell: bash
         run: |
-          docker compose exec -T php ls -la ./
-          docker compose exec -T php ls -la /tmp
+          docker compose exec -T php ls -la /mnt/files
 
 #      - name: Run tests
 #        shell: bash
