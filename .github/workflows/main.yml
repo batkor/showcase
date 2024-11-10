@@ -26,13 +26,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: ./code/modules/module
-#
-#      - name: Run Drupal docker
-#        shell: bash
-#        run: docker compose up -d
 
-      - name: Finished
+      - name: Run Drupal docker
         shell: bash
-        run: |
-          ls -la ./
-          ls -la ./code/modules/module
+        run: docker compose up -d
+
+      - name: Run tests
+        shell: bash
+        run: docker compose exec -T php ./vendor/bin/phpunit -c phpunit.xml ./code/modules/module/tests/src/Functional/PluginRenderTest.php
+
+#      - name: Finished
+#        shell: bash
+#        run: |
+#          ls -la ./
+#          ls -la ./code/modules/module
