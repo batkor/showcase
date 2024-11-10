@@ -35,5 +35,4 @@ jobs:
         shell: bash
         run: |
           ls -la ./
-          ls -la ./.github
-          ls -la ./.github/actions
+          ls -la ./code/modules/module
