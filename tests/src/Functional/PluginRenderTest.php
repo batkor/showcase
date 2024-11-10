@@ -45,8 +45,7 @@ class PluginRenderTest extends BrowserTestBase {
    * Tests a plugin provides block.
    */
   public function testBlockPlugin(): void {
-    $response = $this->drupalGet('/');
-    var_dump($response);
+    $this->drupalGet('/');
     $this->assertSession()->responseContains('Example block');
   }
 
