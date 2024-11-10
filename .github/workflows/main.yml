@@ -31,6 +31,10 @@ jobs:
         shell: bash
         run: docker compose up -d
 
+      - name: Install composer
+        shell: bash
+        run: docker compose exec -T php composer install
+
       - name: Run tests
         shell: bash
         run: |
