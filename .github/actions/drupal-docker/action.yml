@@ -8,6 +8,10 @@ name: 'Drupal docker'
 runs:
   using: "composite"
   steps:
+    - name: Fetch Drupal
+      shell: bash
+      run: git clone --branch 10.3.7 --single-branch https://git.drupalcode.org/project/drupal.git ./code
+
     - name: Copy files for environment
       shell: bash
       run: |
@@ -15,7 +19,4 @@ runs:
         cp ./.github/actions/drupal-docker/.env ./.env
         cp ./.github/actions/drupal-docker/docker-compose.yml ./docker-compose.yml
 
-    - name: Fetch Drupal
-      shell: bash
-      run: git clone --branch 10.3.7 --single-branch https://git.drupalcode.org/project/drupal.git ./code
 
