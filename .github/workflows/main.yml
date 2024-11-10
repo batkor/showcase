@@ -38,8 +38,7 @@ jobs:
 #      - name: Update permissions
 #        shell: bash
 #        run: |
-#          docker compose exec -T php touch /mnt/files/test.sqlite
-#          docker compose exec -T --user=0 php chmod 777 /mnt/files -R
+#          chown 1001:
 
       - name: Check
         shell: bash
@@ -49,6 +48,7 @@ jobs:
           echo "On container"
           docker compose exec -T php echo $UID
           docker compose exec -T php ls -lan ./
+          docker compose exec -T php ls -la ./
 
 #      - name: Run tests
 #        shell: bash
