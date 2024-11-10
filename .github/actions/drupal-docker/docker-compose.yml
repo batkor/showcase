@@ -2,6 +2,7 @@ services:
   php:
     image: wodby/drupal-php:$PHP_TAG
     container_name: "${PROJECT_NAME}_php"
+    user: root
     environment:
       # This parameter will pass .env contents to PHP container. This is
       # required by settings.php file.
