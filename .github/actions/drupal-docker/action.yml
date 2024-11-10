@@ -18,5 +18,6 @@ runs:
         mkdir -p ./code/sites/default
         cp ./.github/actions/drupal-docker/.env ./.env
         cp ./.github/actions/drupal-docker/docker-compose.yml ./docker-compose.yml
+        cp ./.github/actions/drupal-docker/phpunit.xml ./code/phpunit.xml
 
 
