@@ -37,9 +37,7 @@ jobs:
 
       - name: Run tests
         shell: bash
-        run: |
-          docker compose exec -T php ls -la ./
-          docker compose exec -T php ls -la ./vendor/bin
+        run: docker compose exec -T php ./vendor/bin/phpunit -c phpunit.xml ./code/modules/module/tests/src/Functional/PluginRenderTest.php
 
 #      - name: Finished
 #        shell: bash
