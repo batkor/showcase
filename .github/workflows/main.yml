@@ -45,9 +45,9 @@ jobs:
         run: |
           docker compose exec -T php ls -la /mnt/files
 
-#      - name: Run tests
-#        shell: bash
-#        run: docker compose exec -T php ./vendor/bin/phpunit -c ./phpunit.xml --debug -v --filter testBlockPlugin modules/module/tests/src/Functional/PluginRenderTest.php
+      - name: Run tests
+        shell: bash
+        run: docker compose exec -T php ./vendor/bin/phpunit -c ./phpunit.xml --debug -v --filter testBlockPlugin modules/module/tests/src/Functional/PluginRenderTest.php
 
 #      - name: Finished
 #        shell: bash
