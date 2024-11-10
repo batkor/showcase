@@ -45,10 +45,10 @@ jobs:
         shell: bash
         run: |
           echo $UID
-          ls -la ./
+          ls -lan ./
           echo "On container"
           docker compose exec -T php echo $UID
-          docker compose exec -T php ls -la ./
+          docker compose exec -T php ls -lan ./
 
 #      - name: Run tests
 #        shell: bash
