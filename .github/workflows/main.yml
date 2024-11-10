@@ -17,7 +17,7 @@ jobs:
         with:
           sparse-checkout: |
             .github
-
+          sparse-checkout-cone-mode: false
 #      - name: Prepare environment
 #        uses: './.github/actions/drupal-docker'
 ##        with:
@@ -28,4 +28,8 @@ jobs:
 #        run: docker compose up -d
 
       - name: Finished
-        run: ls -la ./
+        shell: bash
+        run: |
+          ls -la ./
+          ls -la ./.github
+          ls -la ./.github/actions
