@@ -1,19 +1,15 @@
 services:
   php:
-    build:
-      context: https://github.com/wodby/php.git#4.53.3:8
-      args:
-        PHP_VER: 8.2
-        WODBY_GROUP_ID: 1001
-        WODBY_USER_ID: 1001
+    image: wodby/drupal-php:$PHP_TAG
     container_name: "${PROJECT_NAME}_php"
+    user: root
     environment:
       # This parameter will pass .env contents to PHP container. This is
       # required by settings.php file.
       PHP_FPM_CLEAR_ENV: "no"
       # PHPUnit Drupal testing configurations
       SIMPLETEST_BASE_URL: "http://nginx"
-      SIMPLETEST_DB: "sqlite://localhost//mnt/files/test.sqlite"
+      SIMPLETEST_DB: "sqlite://localhost//dev/shm/test.sqlite"
 #      SIMPLETEST_DB: "mysql://${DB_USER}:${DB_PASSWORD}@mariadb/${DB_NAME}#tests_"
       MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","goog:chromeOptions":{"args":["--disable-gpu","--headless"]}}, "http://chrome:9515"]'
       PHP_FPM_USER: wodby
