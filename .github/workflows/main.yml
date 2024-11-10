@@ -12,16 +12,20 @@ jobs:
     name: Run PHPUnit
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout only actions
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
             .github
           sparse-checkout-cone-mode: false
-#      - name: Prepare environment
-#        uses: './.github/actions/drupal-docker'
-##        with:
-##          directory: './web/modules/custom'
+
+      - name: Prepare environment
+        uses: './.github/actions/drupal-docker'
+
+      - name: Checkout repository to modules directory
+        uses: actions/checkout@v4
+        with:
+          path: ./code/modules/module
 #
 #      - name: Run Drupal docker
 #        shell: bash
