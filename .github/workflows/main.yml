@@ -38,6 +38,7 @@ jobs:
       - name: Update permissions
         shell: bash
         run: |
+          docker compose exec -T php touch /mnt/files/test.sqlite
           docker compose exec -T --user=0 php chmod 777 /mnt/files -R
 
       - name: Check
