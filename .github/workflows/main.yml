@@ -41,14 +41,15 @@ jobs:
 #          docker compose exec -T php touch /mnt/files/test.sqlite
 #          docker compose exec -T --user=0 php chmod 777 /mnt/files -R
 
-#      - name: Check
-#        shell: bash
-#        run: |
-#          docker compose exec -T php ls -la /mnt/files
-
-      - name: Run tests
+      - name: Check
         shell: bash
-        run: docker compose exec -T php ./vendor/bin/phpunit -c ./phpunit.xml --debug -v --filter testBlockPlugin modules/module/tests/src/Functional/PluginRenderTest.php
+        run: |
+          echo $UID
+          docker compose exec -T php echo $UID
+
+#      - name: Run tests
+#        shell: bash
+#        run: docker compose exec -T php ./vendor/bin/phpunit -c ./phpunit.xml --debug -v --filter testBlockPlugin modules/module/tests/src/Functional/PluginRenderTest.php
 
 #      - name: Finished
 #        shell: bash
