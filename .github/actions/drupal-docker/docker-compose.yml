@@ -1,4 +1,15 @@
 services:
+  mariadb:
+    image: wodby/mariadb:$MARIADB_TAG
+    container_name: "${PROJECT_NAME}_mariadb"
+    stop_grace_period: 30s
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+      MYSQL_DATABASE: $DB_NAME
+      MYSQL_USER: $DB_USER
+      MYSQL_PASSWORD: $DB_PASSWORD
+      MYSQL_TRANSACTION_ISOLATION: READ-COMMITTED
+
   php:
     image: wodby/drupal-php:$PHP_TAG
     container_name: "${PROJECT_NAME}_php"
@@ -9,10 +20,9 @@ services:
       PHP_FPM_CLEAR_ENV: "no"
       # PHPUnit Drupal testing configurations
       SIMPLETEST_BASE_URL: "http://nginx"
-      SIMPLETEST_DB: "sqlite://localhost//mnt/files/test.sqlite"
+#      SIMPLETEST_DB: "sqlite://localhost//mnt/files/test.sqlite"
+      SIMPLETEST_DB: "mysql://${DB_USER}:${DB_PASSWORD}@mariadb/${DB_NAME}#tests_"
       MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","goog:chromeOptions":{"args":["--disable-gpu","--headless"]}}, "http://chrome:9515"]'
-      # docker compose up -d --no-deps --build php
-      # This will allow to run tests without 'sudo'.
       PHP_FPM_USER: wodby
       PHP_FPM_GROUP: wodby
     volumes:
