@@ -35,10 +35,10 @@ jobs:
         shell: bash
         run: docker compose exec -T php composer install
 
-#      - name: Update permissions
-#        shell: bash
-#        run: |
-#          chown 1001:
+      - name: Update permissions
+        shell: bash
+        run: |
+          chown 1000:1000 ./code -R
 
       - name: Check
         shell: bash
