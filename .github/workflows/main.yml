@@ -35,27 +35,12 @@ jobs:
         shell: bash
         run: docker compose exec -T php composer install
 
+#        Change permissions for all files.
       - name: Update permissions
         shell: bash
         run: |
           docker compose exec -T --user=0 php chown 1000:1000 ./ -R
 
-      - name: Check
-        shell: bash
-        run: |
-          echo $UID
-          ls -lan ./
-          echo "On container"
-          docker compose exec -T php echo $UID
-          docker compose exec -T php ls -lan ./
-          docker compose exec -T php ls -la ./
-
       - name: Run tests
         shell: bash
-        run: docker compose exec -T php ./vendor/bin/phpunit -c ./phpunit.xml --debug -v --filter testBlockPlugin modules/module/tests/src/Functional/PluginRenderTest.php
-
-#      - name: Finished
-#        shell: bash
-#        run: |
-#          ls -la ./
-#          ls -la ./code/modules/module
+        run: docker compose exec -T php ./vendor/bin/phpunit -c ./phpunit.xml modules/module/tests/src/Functional/PluginRenderTest.php
