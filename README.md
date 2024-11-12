@@ -7,7 +7,7 @@ from `*.html.twig` files.
 For use this module your need create or update
 TWIG file.
 
-## For create block
+## Create block
 
 1. Your need add on twig file, next lines:
 ```
@@ -20,7 +20,7 @@ TWIG file.
 2. Cache rebuild
 3. Add block on "Block layout" page (`/admin/structure/block`)
 
-## For create page
+## Create page
 
 1. Your need add on twig file, next lines:
 ```twig
