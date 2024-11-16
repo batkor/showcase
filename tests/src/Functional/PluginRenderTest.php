@@ -49,5 +49,4 @@ class PluginRenderTest extends BrowserTestBase {
     $this->assertSession()->responseContains('Example block');
   }
 
-
 }
