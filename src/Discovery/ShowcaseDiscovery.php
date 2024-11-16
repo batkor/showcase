@@ -91,9 +91,10 @@ class ShowcaseDiscovery implements DiscoveryInterface, DiscoverableInterface {
 
           /** @var \SplFileInfo $fileInfo */
           foreach ($iterator as $fileInfo) {
-            $files[$fileInfo->getPathname()] = [
+            $absolutePath = realpath($fileInfo->getPathname());
+            $files[$absolutePath] = [
               'provider' => $provider,
-              'directory' => $directory,
+              'directory' => realpath($directory),
               'relative_path' => str_replace($directory, '', $fileInfo->getPathname()),
             ];
           }

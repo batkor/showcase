@@ -76,3 +76,34 @@ For more information, see `showcase_example` module.
 | `access`       | The access to plugin. Override access to route.                                                                                     |
 | `data`         | The list variables available in template or callable string.                                                                        |
 
+
+## Extra settings
+
+### Management environment.
+
+Your can set next options on `settings.php` file
+`$settings['showcase']['env']` Variable use for
+control `access` to plugin. Default support `all`
+value. You can set `dev` and in plugin set `access`
+key to `dev` and plugin rendered only project DEVELOPMENT environment.
+
+### Arbitrary template directory.
+
+After add next code on settings.php:
+```php
+$settings['showcase']['directories'][] = '../templates';
+```
+Your can create templates in as directory.
+
+```
+.
+├── ...
+├── templates                 # Directory inputted in settings.php
+│   ├── front-page.html.twig  # Your template
+│   └── ...
+├── web                       # Drupal root directory
+│   ├── core
+│   ├── modules
+│   └── ...
+```
+

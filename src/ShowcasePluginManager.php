@@ -11,6 +11,7 @@ use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Plugin\Discovery\YamlDiscovery;
 use Drupal\Core\Plugin\Factory\ContainerFactory;
+use Drupal\Core\Site\Settings;
 use Drupal\showcase\Discovery\ShowcaseDiscovery;
 
 /**
@@ -93,13 +94,12 @@ final class ShowcasePluginManager extends DefaultPluginManager {
   protected function getDiscovery(): ShowcaseDiscovery {
     if (!isset($this->discovery)) {
       $directories = $this->moduleHandler->getModuleDirectories() + $this->themeHandler->getThemeDirectories();
-
       $directories = array_map(function ($dir) {
         return array_map(function ($templateDirectory) use ($dir) {
           return $dir . DIRECTORY_SEPARATOR . ltrim($templateDirectory, DIRECTORY_SEPARATOR);
         }, $this->templateDirectories);
       }, $directories);
-
+      $directories += self::getArbitraryDirectories();
       $this->discovery = new ShowcaseDiscovery($directories);
     }
 
@@ -109,15 +109,24 @@ final class ShowcasePluginManager extends DefaultPluginManager {
   /**
    * {@inheritdoc}
    */
-  protected function alterDefinitions(&$definitions) {
+  protected function alterDefinitions(&$definitions): void {
     foreach ($definitions as &$def) {
       if ($this->moduleHandler->moduleExists($def['provider'])) {
         $module = $this->moduleHandler->getModule($def['provider']);
         $def['provider_directory'] = $module->getPath();
+
+        continue;
       }
+
       if ($this->themeHandler->themeExists($def['provider'])) {
         $theme = $this->themeHandler->getTheme($def['provider']);
         $def['provider_directory'] = $theme->getPath();
+
+        continue;
+      }
+
+      if (self::isArbitraryProvider($def['provider'])) {
+        $def['provider_directory'] = $def['template_directory'];
       }
     }
 
@@ -128,7 +137,42 @@ final class ShowcasePluginManager extends DefaultPluginManager {
    * {@inheritdoc}
    */
   protected function providerExists($provider): bool {
-    return $this->moduleHandler->moduleExists($provider) || $this->themeHandler->themeExists($provider);
+    if ($this->moduleHandler->moduleExists($provider)) {
+      return TRUE;
+    }
+
+    if ($this->themeHandler->themeExists($provider)) {
+      return TRUE;
+    }
+
+    return self::isArbitraryProvider($provider);
+  }
+
+  /**
+   * Returns env.
+   */
+  public static function getEnv(): ?string {
+    return Settings::get('showcase')['env'] ?? NULL;
+  }
+
+  /**
+   * Returns arbitrary template directory.
+   */
+  public static function getArbitraryDirectories(): array {
+    $directories = [];
+
+    foreach ( Settings::get('showcase')['directories'] ?? [] as $dirPath) {
+      $directories['showcase:arbitrary:' . $dirPath] = [$dirPath];
+    }
+
+    return $directories;
+  }
+
+  /**
+   * Returns TRUE if provider contains arbitrary directory mask.
+   */
+  public static function isArbitraryProvider(string $provider): bool {
+    return str_starts_with($provider, 'showcase:arbitrary:');
   }
 
 }

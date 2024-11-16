@@ -122,13 +122,11 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
       return TRUE;
     }
 
-    $env = Settings::get('showcase', [])['env'] ?? NULL;
-
     if ($this->getPluginDefinition()['access'] === 'all') {
       return TRUE;
     }
 
-    return $this->getPluginDefinition()['access'] === $env;
+    return $this->getPluginDefinition()['access'] === ShowcasePluginManager::getEnv();
   }
 
   /**

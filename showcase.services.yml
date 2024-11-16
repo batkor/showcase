@@ -18,3 +18,9 @@ services:
     arguments: ['@plugin.manager.showcase']
     tags:
       - { name: event_subscriber }
+
+  twig.loader.showcase:
+    public: false
+    class: Drupal\showcase\ShowcaseTwigLoader
+    tags:
+      - { name: twig.loader, priority: 100}
