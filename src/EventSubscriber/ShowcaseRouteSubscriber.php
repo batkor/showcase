@@ -100,16 +100,19 @@ final class ShowcaseRouteSubscriber implements EventSubscriberInterface {
         '_access' => 'TRUE',
       ];
 
-      $route = new Route(
-        $def['path'],
-        [
-          '_controller' => ShowcaseController::class,
-        ],
-        $requirements,
-        [
-          'showcase' => $def,
-        ],
-      );
+      $defaults = [
+        '_controller' => ShowcaseController::class,
+      ];
+
+      if (!empty($def['label'])) {
+        $defaults['_title'] = $def['label'];
+      }
+
+      $options = [
+        'showcase' => $def,
+      ];
+
+      $route = new Route($def['path'], $defaults, $requirements, $options);
       $collection->add($id, $route);
     }
   }
