@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Provides hooks for "showcase" module.
+ */
+
+/**
+ * Implements hook_library_info_build().
+ */
+function showcase_library_info_build(): array {
+  $libraries = [];
+  $defs = \Drupal::service('plugin.manager.showcase')
+    ->getDefinitions();
+
+  foreach ($defs as $def) {
+    foreach (['css', 'js'] as $type) {
+      if (!empty($def[$type]) && is_array($def[$type])) {
+        foreach ($def[$type] as $file => $attributes) {
+          if ($type === 'css') {
+            $libraries[$def['id']][$type]['theme'][$file] = $attributes;
+          }
+          else {
+            $libraries[$def['id']][$type][$file] = $attributes;
+          }
+        }
+      }
+    }
+  }
+
+  return $libraries;
+}

@@ -6,7 +6,6 @@ namespace Drupal\showcase;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Utility\CallableResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -61,6 +60,24 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
       '@provider' => $provider,
       '@template' => $template,
     ]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function build(): array {
+    return [
+      '#type' => 'inline_template',
+      '#template' => '{{ value|raw }}',
+      '#context' => [
+        'value' => $this->render(),
+      ],
+      '#attached' => [
+        'library' => [
+          'showcase/' . $this->getPluginId(),
+        ]
+      ],
+    ];
   }
 
   /**
