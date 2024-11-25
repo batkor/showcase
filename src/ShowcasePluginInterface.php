@@ -17,6 +17,13 @@ interface ShowcasePluginInterface extends PluginInspectionInterface {
   public function label(): string;
 
   /**
+   * Returns renderable array.
+   *
+   * @return array
+   */
+  public function build(): array;
+
+  /**
    * Render plugin.
    *
    * @return string
