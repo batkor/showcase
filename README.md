@@ -75,6 +75,8 @@ For more information, see `showcase_example` module.
 | `requirements` | The route requirements.                                                                                                             |
 | `access`       | The access to plugin. Override access to route.                                                                                     |
 | `data`         | The list variables available in template or callable string.                                                                        |
+| `css`          | The paths list to .css file for attach into a plugin.                                                                               |
+| `jss`          | The paths list to .js file for attach into a plugin.                                                                                |
 
 
 ## Extra settings
@@ -107,3 +109,27 @@ Your can create templates in as directory.
 │   └── ...
 ```
 
+### Attach *.css and *.js files.
+
+```
+{#---
+  {
+    ...
+    "css": {
+      "/assets/showcase_example/path.css": {},
+      "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css": {
+        "crossorigin": "anonymous",
+        "integrity": "sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      }
+    },
+    "js": {
+      "/assets/showcase_example/path.js": {},
+      "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js": {
+        "crossorigin": "anonymous",
+        "integrity": "sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+      }
+    }
+    ...
+  }
+---#}
+```
