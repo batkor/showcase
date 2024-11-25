@@ -63,13 +63,7 @@ final class ShowcaseBlock extends BlockBase implements ContainerFactoryPluginInt
     $plugin = $this
       ->pluginManagerShowcase
       ->createInstance($id);
-    $build['content'] = [
-      '#type' => 'inline_template',
-      '#template' => '{{ value|raw }}',
-      '#context' => [
-        'value' => $plugin->render(),
-      ],
-    ];
+    $build['content'] = $plugin->build();
 
     return $build;
   }

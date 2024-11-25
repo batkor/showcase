@@ -59,6 +59,10 @@ final class ShowcasePluginManager extends DefaultPluginManager {
     'access' => NULL,
     // The list variables available in template or callable string.
     'data' => [],
+    // The paths list to .css file for attach into a plugin.
+    'css' => [],
+    // The paths list to .js file for attach into a plugin.
+    'js' => [],
   ];
 
   /**

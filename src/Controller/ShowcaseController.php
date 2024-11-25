@@ -45,13 +45,7 @@ final class ShowcaseController implements ContainerInjectionInterface {
       ->pluginManagerShowcase
       ->createInstance($def['id']);
 
-    return [
-      '#type' => 'inline_template',
-      '#template' => '{{ value|raw }}',
-      '#context' => [
-        'value' => $plugin->render(),
-      ],
-    ];
+    return $plugin->build();
   }
 
 }
