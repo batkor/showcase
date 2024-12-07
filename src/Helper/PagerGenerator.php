@@ -7,12 +7,6 @@ namespace Drupal\showcase\Helper;
  */
 class PagerGenerator {
 
-  private int $total;
-
-  private int $current;
-
-  private int $itemsPerPage;
-
   private int $first;
 
   private int $last;
@@ -21,13 +15,13 @@ class PagerGenerator {
 
   private int $begin = 0;
 
-  public function __construct(int $total, int $itemsPerPage, int $current) {
-    $this->total = $total;
-    $this->itemsPerPage = $itemsPerPage;
-    $this->current = $current;
-  }
+  public function __construct(
+    private readonly int $total,
+    private readonly int $itemsPerPage,
+    private readonly int $current
+  ) {}
 
-  public function setBegin(int $begin) {
+  public function setBegin(int $begin): void {
     $this->begin = $begin;
   }
 
