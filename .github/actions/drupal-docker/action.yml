@@ -1,0 +1,23 @@
+name: 'Drupal docker'
+
+#inputs:
+#  directory:
+#    description: 'Repository directory'
+#    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Fetch Drupal
+      shell: bash
+      run: git clone --branch 10.3.7 --single-branch https://git.drupalcode.org/project/drupal.git ./code
+
+    - name: Copy files for environment
+      shell: bash
+      run: |
+        mkdir -p ./code/sites/default
+        cp ./.github/actions/drupal-docker/.env ./.env
+        cp ./.github/actions/drupal-docker/docker-compose.yml ./docker-compose.yml
+        cp ./.github/actions/drupal-docker/phpunit.xml ./code/phpunit.xml
+
+

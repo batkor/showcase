@@ -1,0 +1,46 @@
+name: Main
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  phpunit:
+    name: Run PHPUnit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout only actions
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github
+          sparse-checkout-cone-mode: false
+
+      - name: Prepare environment
+        uses: './.github/actions/drupal-docker'
+
+      - name: Checkout repository to modules directory
+        uses: actions/checkout@v4
+        with:
+          path: ./code/modules/module
+
+      - name: Run Drupal docker
+        shell: bash
+        run: docker compose up -d
+
+      - name: Install composer
+        shell: bash
+        run: docker compose exec -T php composer install
+
+#        Change permissions for all files.
+      - name: Update permissions
+        shell: bash
+        run: |
+          docker compose exec -T --user=0 php chown 1000:1000 ./ -R
+
+      - name: Run tests
+        shell: bash
+        run: docker compose exec -T php ./vendor/bin/phpunit -c ./phpunit.xml modules/module/tests/src/Functional/PluginRenderTest.php
