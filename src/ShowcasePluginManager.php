@@ -167,7 +167,7 @@ final class ShowcasePluginManager extends DefaultPluginManager {
   public static function getArbitraryDirectories(): array {
     $directories = [];
 
-    foreach ( Settings::get('showcase')['directories'] ?? [] as $dirPath) {
+    foreach (Settings::get('showcase')['directories'] ?? [] as $dirPath) {
       $directories['showcase:arbitrary:' . $dirPath] = [$dirPath];
     }
 

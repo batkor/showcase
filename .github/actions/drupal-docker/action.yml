@@ -10,7 +10,7 @@ runs:
   steps:
     - name: Fetch Drupal
       shell: bash
-      run: git clone --branch 10.3.7 --single-branch https://git.drupalcode.org/project/drupal.git ./code
+      run: git clone --branch 10.1.0 --single-branch https://git.drupalcode.org/project/drupal.git ./code
 
     - name: Copy files for environment
       shell: bash

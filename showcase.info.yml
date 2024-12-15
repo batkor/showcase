@@ -2,4 +2,4 @@ name: 'Showcase'
 type: module
 description: 'Provides functional for fast development project.'
 package: Showcase
-core_version_requirement: ^10.2
+core_version_requirement: ^10 || <10.2

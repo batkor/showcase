@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\showcase;
 
+use Drupal\Core\Controller\ControllerResolver;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\Core\Utility\CallableResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
@@ -23,9 +23,9 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
   protected string $root;
 
   /**
-   * The event dispatcher.
+   * The callable resolver.
    */
-  protected ?CallableResolver $callableResolver;
+  protected ?ControllerResolver $controllerResolver;
 
   /**
    * The argument resolver.
@@ -43,7 +43,7 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $static = new static($configuration, $plugin_id, $plugin_definition);
     $static->root = $container->getParameter('app.root');
-    $static->callableResolver = $container->get('callable_resolver');
+    $static->controllerResolver = $container->get('controller_resolver');
     $static->argumentResolver = $container->get('http_kernel.controller.argument_resolver');
     $static->requestStack = $container->get('request_stack');
 
@@ -115,7 +115,7 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
     }
 
     try {
-      $dataCallable = $this->callableResolver->getCallableFromDefinition($data);
+      $dataCallable = $this->controllerResolver->getControllerFromDefinition($data);
     }
     catch (\InvalidArgumentException $e) {
       throw new \InvalidArgumentException(sprintf('Not callable data on plugin %s', $this->getPluginId()), 0, $e);
