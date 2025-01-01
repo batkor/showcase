@@ -157,7 +157,11 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
    * {@inheritdoc}
    */
   public function getTemplatePath(): string {
-    return str_replace($this->root, '', $this->getPluginDefinition()['source_file']);
+    if (ShowcasePluginManager::isArbitraryProvider($this->getPluginDefinition()['provider'])) {
+      return $this->getPluginDefinition()['source_file'];
+    }
+
+    return $this->getPluginDefinition()['source_file_relative'];
   }
 
   /**
