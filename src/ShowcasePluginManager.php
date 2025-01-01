@@ -78,6 +78,11 @@ final class ShowcasePluginManager extends DefaultPluginManager {
   protected array $templateDirectories;
 
   /**
+   * The app root directory.
+   */
+  protected string $appRoot;
+
+  /**
    * Constructs ShowcasePluginManager object.
    */
   public function __construct(
@@ -85,6 +90,7 @@ final class ShowcasePluginManager extends DefaultPluginManager {
     ModuleHandlerInterface $moduleHandler,
     ThemeHandlerInterface $themeHandler,
     array $frontMatterSettings,
+    string $appRoot,
   ) {
     $this->factory = new ContainerFactory($this);
     $this->moduleHandler = $moduleHandler;
@@ -92,6 +98,7 @@ final class ShowcasePluginManager extends DefaultPluginManager {
     $this->alterInfo('showcase_info');
     $this->setCacheBackend($cacheBackend, 'showcase_plugins');
     $this->templateDirectories = $frontMatterSettings['directories'];
+    $this->appRoot = $appRoot;
   }
 
   /**
@@ -117,6 +124,8 @@ final class ShowcasePluginManager extends DefaultPluginManager {
    */
   protected function alterDefinitions(&$definitions): void {
     foreach ($definitions as &$def) {
+      $def['source_file_relative'] = str_replace($this->appRoot, '', $def['source_file']);
+
       if ($this->moduleHandler->moduleExists($def['provider'])) {
         $module = $this->moduleHandler->getModule($def['provider']);
         $def['provider_directory'] = $module->getPath();

@@ -12,6 +12,7 @@ services:
       - '@module_handler'
       - '@theme_handler'
       - '%showcase.front_matter%'
+      - '%app.root%'
 
   showcase.route_subscriber:
     class: Drupal\showcase\EventSubscriber\ShowcaseRouteSubscriber
