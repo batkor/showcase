@@ -54,11 +54,13 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
    * {@inheritdoc}
    */
   public function label(): string {
-    [$provider, $template] = explode(':', $this->getPluginId());
+    if (!empty($this->pluginDefinition['label'])) {
+      return $this->pluginDefinition['label'];
+    }
 
-    return $this->pluginDefinition['label'] ?? (string) new TranslatableMarkup('Showcase block. @provider: @template', [
-      '@provider' => $provider,
-      '@template' => $template,
+    return (string) new TranslatableMarkup('Template: @template', [
+      '@provider' => $this->getPluginDefinition()['provider'] ?? '',
+      '@template' => '.../' . basename($this->getTemplatePath()),
     ]);
   }
 
@@ -82,7 +84,7 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
       '#attached' => [
         'library' => [
           'showcase/' . $this->getPluginId(),
-        ]
+        ],
       ],
     ];
   }
