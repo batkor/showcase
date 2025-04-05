@@ -7,35 +7,18 @@ namespace Drupal\showcase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\Core\Utility\CallableResolver;
+use Drupal\showcase\Event\ShowcasePrepareVariableEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Default class used for showcases plugins.
  */
 final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginInterface, ContainerFactoryPluginInterface {
 
-  /**
-   * The app root.
-   */
   protected string $root;
 
-  /**
-   * The event dispatcher.
-   */
-  protected ?CallableResolver $callableResolver;
-
-  /**
-   * The argument resolver.
-   */
-  protected ?ArgumentResolverInterface $argumentResolver;
-
-  /**
-   * The request stack.
-   */
-  protected ?RequestStack $requestStack;
+  protected ?EventDispatcherInterface $eventDispatcher;
 
   /**
    * {@inheritdoc}
@@ -43,9 +26,7 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     $static = new self($configuration, $plugin_id, $plugin_definition);
     $static->root = $container->getParameter('app.root');
-    $static->callableResolver = $container->get('callable_resolver');
-    $static->argumentResolver = $container->get('http_kernel.controller.argument_resolver');
-    $static->requestStack = $container->get('request_stack');
+    $static->eventDispatcher = $container->get('event_dispatcher');
 
     return $static;
   }
@@ -110,34 +91,10 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
    * {@inheritdoc}
    */
   public function getVariables(): array {
-    $data = $this->getPluginDefinition()['data'];
+    $event = new ShowcasePrepareVariableEvent($this);
+    $this->eventDispatcher->dispatch($event);
 
-    if (\is_array($data)) {
-      return $data;
-    }
-
-    try {
-      $dataCallable = $this->callableResolver->getCallableFromDefinition($data);
-    }
-    catch (\InvalidArgumentException $e) {
-      throw new \InvalidArgumentException(\sprintf('Not callable data on plugin %s', $this->getPluginId()), 0, $e);
-    }
-
-    if (\is_array($dataCallable) && \method_exists(...$dataCallable)) {
-      $controllerReflector = new \ReflectionMethod(...$dataCallable);
-    }
-    elseif (\is_string($dataCallable) && \str_contains($dataCallable, '::')) {
-      $controllerReflector = new \ReflectionMethod(...\explode('::', $dataCallable, 2));
-    }
-    else {
-      $controllerReflector = new \ReflectionFunction($dataCallable(...));
-    }
-
-    $arguments = $this
-      ->argumentResolver
-      ->getArguments($this->requestStack->getCurrentRequest(), $dataCallable, $controllerReflector);
-
-    return $dataCallable(...$arguments);
+    return $event->getVariables();
   }
 
   /**

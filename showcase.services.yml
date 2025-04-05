@@ -20,6 +20,20 @@ services:
     tags:
       - { name: event_subscriber }
 
+  showcase.callable_variable.event_subscriber:
+    class: Drupal\showcase\EventSubscriber\ShowcaseCallableVariable
+    arguments:
+      - '@callable_resolver'
+      - '@http_kernel.controller.argument_resolver'
+      - '@request_stack'
+    tags:
+      - { name: event_subscriber }
+
+  showcase.variable.event_subscriber:
+    class: Drupal\showcase\EventSubscriber\ShowcaseVariable
+    tags:
+      - { name: event_subscriber }
+
   twig.loader.showcase:
     public: false
     class: Drupal\showcase\ShowcaseTwigLoader
