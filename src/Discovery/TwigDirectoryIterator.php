@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\showcase\Discovery;
 
 /**
  * Iterates twig files in a directory.
  */
-class TwigDirectoryIterator extends \RegexIterator {
+final class TwigDirectoryIterator extends \RegexIterator {
 
   /**
    * Constructors.

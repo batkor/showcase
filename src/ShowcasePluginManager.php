@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\showcase;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
-use Drupal\Core\Plugin\Discovery\YamlDiscovery;
 use Drupal\Core\Plugin\Factory\ContainerFactory;
 use Drupal\Core\Site\Settings;
 use Drupal\showcase\Discovery\ShowcaseDiscovery;
@@ -17,7 +15,7 @@ use Drupal\showcase\Discovery\ShowcaseDiscovery;
 /**
  * Defines a plugin manager to deal with Front Matter on twig files.
  *
- * Modules  and themes can define Front Matter settings on twig files.
+ * Modules and themes can define Front Matter settings on twig files.
  *
  * Example Front Matter syntax:
  * @code
@@ -44,13 +42,15 @@ final class ShowcasePluginManager extends DefaultPluginManager {
    * {@inheritdoc}
    */
   protected $defaults = [
-    // The showcase id. Set by the plugin system based on the top-level YAML key.
+    // The showcase id. Set by the plugin system based
+    // on the top-level YAML key.
     'id' => '',
     // Optional plugin title.
     'label' => NULL,
     // Default plugin class.
     'class' => ShowcasePluginDefault::class,
-    // The route path. Creating new route if path not registered or override already exist.
+    // The route path.
+    // Creating new route if path not registered or override already exist.
     // If path NULL to will create block plugin.
     'path' => NULL,
     // Use this options if your template contains html tag.
@@ -107,11 +107,7 @@ final class ShowcasePluginManager extends DefaultPluginManager {
   protected function getDiscovery(): ShowcaseDiscovery {
     if (!isset($this->discovery)) {
       $directories = $this->moduleHandler->getModuleDirectories() + $this->themeHandler->getThemeDirectories();
-      $directories = array_map(function ($dir) {
-        return array_map(function ($templateDirectory) use ($dir) {
-          return $dir . DIRECTORY_SEPARATOR . ltrim($templateDirectory, DIRECTORY_SEPARATOR);
-        }, $this->templateDirectories);
-      }, $directories);
+      $directories = \array_map([self::class, 'findDirectories'], $directories);
       $directories += self::getArbitraryDirectories();
       $this->discovery = new ShowcaseDiscovery($directories);
     }
@@ -119,12 +115,18 @@ final class ShowcasePluginManager extends DefaultPluginManager {
     return $this->discovery;
   }
 
+  public function findDirectories($directory): array {
+    return \array_map(static fn ($templateDirectory) =>
+      $directory . \DIRECTORY_SEPARATOR . \ltrim($templateDirectory, \DIRECTORY_SEPARATOR),
+    $this->templateDirectories);
+  }
+
   /**
    * {@inheritdoc}
    */
   protected function alterDefinitions(&$definitions): void {
     foreach ($definitions as &$def) {
-      $def['source_file_relative'] = str_replace($this->appRoot, '', $def['source_file']);
+      $def['source_file_relative'] = \str_replace($this->appRoot, '', $def['source_file']);
 
       if ($this->moduleHandler->moduleExists($def['provider'])) {
         $module = $this->moduleHandler->getModule($def['provider']);
@@ -140,9 +142,11 @@ final class ShowcasePluginManager extends DefaultPluginManager {
         continue;
       }
 
-      if (self::isArbitraryProvider($def['provider'])) {
-        $def['provider_directory'] = $def['template_directory'];
+      if (!self::isArbitraryProvider($def['provider'])) {
+        continue;
       }
+
+      $def['provider_directory'] = $def['template_directory'];
     }
 
     parent::alterDefinitions($definitions);
@@ -187,7 +191,7 @@ final class ShowcasePluginManager extends DefaultPluginManager {
    * Returns TRUE if provider contains arbitrary directory mask.
    */
   public static function isArbitraryProvider(string $provider): bool {
-    return str_starts_with($provider, 'showcase:arbitrary:');
+    return \str_starts_with($provider, 'showcase:arbitrary:');
   }
 
 }

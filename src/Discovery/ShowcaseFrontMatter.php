@@ -1,36 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\showcase\Discovery;
 
-use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Json;
 
 /**
  * The parser front matter.
  */
-class ShowcaseFrontMatter {
+final class ShowcaseFrontMatter {
 
-  const REGEXP = '/\A({#---(.*?)?\R---#})/s';
-
-  /**
-   * String contains source data.
-   */
-  protected string $source;
+  public const REGEXP = '/\A({#---(.*?)?\R---#})/s';
 
   /**
    * The parse result.
    */
   protected array $result;
 
-  /**
-   * Constructors
-   *
-   * @param string $source
-   *   String contains source data.
-   */
-  public function __construct(string $source) {
-    $this->source = $source;
-  }
+  public function __construct(
+    protected string $source,
+  ) {}
 
   /**
    * Returns new instance.
@@ -59,13 +49,13 @@ class ShowcaseFrontMatter {
 
     $this->result = [];
 
-    if (preg_match(static::REGEXP, $this->source, $matches)) {
-      $raw = !empty($matches[1]) ? trim($matches[1]) : '';
-      $frontMatterData = !empty($matches[2]) ? trim($matches[2]) : '';
+    if (\preg_match(self::REGEXP, $this->source, $matches)) {
+      $raw = !empty($matches[1]) ? \trim($matches[1]) : '';
+      $frontMatterData = !empty($matches[2]) ? \trim($matches[2]) : '';
       $data = Json::decode($frontMatterData);
 
-      if (is_null($data)) {
-        throw new \Exception(sprintf('Failed parse front matter from %s', $this->source));
+      if (\is_null($data)) {
+        throw new \Exception(\sprintf('Failed parse front matter from %s', $this->source));
       }
 
       $this->result = [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\showcase\Discovery;
 
 use Drupal\Component\Discovery\DiscoverableInterface;
@@ -7,26 +9,21 @@ use Drupal\Component\FileCache\FileCacheFactory;
 use Drupal\Component\Plugin\Discovery\DiscoveryInterface;
 use Drupal\Component\Plugin\Discovery\DiscoveryTrait;
 
-class ShowcaseDiscovery implements DiscoveryInterface, DiscoverableInterface {
+final class ShowcaseDiscovery implements DiscoveryInterface, DiscoverableInterface {
 
   use DiscoveryTrait;
 
   /**
-   * The directories list for find templates.
+   * {@inheritdoc}
    */
-  protected array $directories;
+  public function __construct(
+    protected array $directories,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
-  public function __construct($directories) {
-    $this->directories = $directories;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDefinitions() {
+  public function getDefinitions(): array {
     $plugins = $this->findAll();
     $definitions = [];
 
@@ -42,10 +39,10 @@ class ShowcaseDiscovery implements DiscoveryInterface, DiscoverableInterface {
   /**
    * {@inheritdoc}
    */
-  public function findAll() {
+  public function findAll(): array {
     $all = [];
     $files = $this->findFiles();
-    $pathFiles = array_keys($files);
+    $pathFiles = \array_keys($files);
     $cache = FileCacheFactory::get('showcase:twig:front_matter');
 
     foreach ($cache->getMultiple($pathFiles) as $file => $data) {
@@ -55,10 +52,10 @@ class ShowcaseDiscovery implements DiscoveryInterface, DiscoverableInterface {
 
     foreach ($files as $file => $providerData) {
       try {
-        $parseResult = ShowcaseFrontMatter::create(file_get_contents($file))->parse();
+        $parseResult = ShowcaseFrontMatter::create(\file_get_contents($file))->parse();
       }
       catch (\Exception $e) {
-        throw new \Exception(sprintf('Failed parse front matter on "%s" template. Parse error: %s', $file, $e->getMessage()));
+        throw new \Exception(\sprintf('Failed parse front matter on "%s" template. Parse error: %s', $file, $e->getMessage()));
       }
 
       if (empty($parseResult['data'])) {
@@ -66,7 +63,7 @@ class ShowcaseDiscovery implements DiscoveryInterface, DiscoverableInterface {
       }
 
       $data = [
-        'id' => $providerData['provider'] . ':' . str_replace(DIRECTORY_SEPARATOR, ':', $providerData['relative_path']),
+        'id' => $providerData['provider'] . ':' . \str_replace(\DIRECTORY_SEPARATOR, ':', $providerData['relative_path']),
         'provider' => $providerData['provider'],
         'template_directory' => $providerData['directory'],
         'source_file' => $file,
@@ -86,18 +83,21 @@ class ShowcaseDiscovery implements DiscoveryInterface, DiscoverableInterface {
 
     foreach ($this->directories as $provider => $directories) {
       foreach ($directories as $directory) {
-        if (is_dir($directory)) {
-          $iterator = new TwigDirectoryIterator($directory);
+        if (!\is_dir($directory)) {
+          continue;
+        }
 
-          /** @var \SplFileInfo $fileInfo */
-          foreach ($iterator as $fileInfo) {
-            $absolutePath = realpath($fileInfo->getPathname());
-            $files[$absolutePath] = [
-              'provider' => $provider,
-              'directory' => realpath($directory),
-              'relative_path' => str_replace($directory, '', $fileInfo->getPathname()),
-            ];
-          }
+        $iterator = new TwigDirectoryIterator($directory);
+
+        foreach ($iterator as $fileInfo) {
+          \assert($fileInfo instanceof \SplFileInfo);
+
+          $absolutePath = \realpath($fileInfo->getPathname());
+          $files[$absolutePath] = [
+            'provider' => $provider,
+            'directory' => \realpath($directory),
+            'relative_path' => \str_replace($directory, '', $fileInfo->getPathname()),
+          ];
         }
       }
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\showcase;
 
 use Twig\Error\LoaderError;
@@ -8,7 +10,7 @@ use Twig\Loader\FilesystemLoader;
 /**
  * Loads templates from the filesystem.
  */
-class ShowcaseTwigLoader extends FilesystemLoader {
+final class ShowcaseTwigLoader extends FilesystemLoader {
 
   /**
    * {@inheritdoc}
@@ -19,9 +21,9 @@ class ShowcaseTwigLoader extends FilesystemLoader {
 
     foreach (ShowcasePluginManager::getArbitraryDirectories() as $directories) {
       foreach ($directories as $directory) {
-        $directory = realpath($directory);
+        $directory = \realpath($directory);
 
-        if (str_starts_with($absolutePath, $directory)) {
+        if (\str_starts_with($absolutePath, $directory)) {
           $allowed = TRUE;
           break;
         }
@@ -32,14 +34,14 @@ class ShowcaseTwigLoader extends FilesystemLoader {
       return NULL;
     }
 
-    if (!str_ends_with($name, '.html.twig')) {
+    if (!\str_ends_with($name, '.html.twig')) {
       if (!$throw) {
         return NULL;
       }
 
-      $extension = pathinfo($name, PATHINFO_EXTENSION);
+      $extension = \pathinfo($name, \PATHINFO_EXTENSION);
 
-      throw new LoaderError(sprintf('Template %s has an invalid file extension (%s). Allowed only file ending ".html.twig".', $name, $extension));
+      throw new LoaderError(\sprintf('Template %s has an invalid file extension (%s). Allowed only file ending ".html.twig".', $name, $extension));
     }
 
     return $this->cache[$name] = $absolutePath;

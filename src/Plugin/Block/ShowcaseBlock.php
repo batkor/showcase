@@ -1,11 +1,13 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Drupal\showcase\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\showcase\ShowcasePluginInterface;
 use Drupal\showcase\ShowcasePluginManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -28,8 +30,8 @@ final class ShowcaseBlock extends BlockBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $static = new static($configuration, $plugin_id, $plugin_definition);
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+    $static = new self($configuration, $plugin_id, $plugin_definition);
     $static->pluginManagerShowcase = $container->get('plugin.manager.showcase');
 
     return $static;
@@ -39,15 +41,9 @@ final class ShowcaseBlock extends BlockBase implements ContainerFactoryPluginInt
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state): array {
-    $id = str_replace('showcase_block:', '', $this->getPluginId());
-    /** @var \Drupal\showcase\ShowcasePluginInterface $plugin */
-    $plugin = $this
-      ->pluginManagerShowcase
-      ->createInstance($id);
-
     $form['message'] = [
       '#markup' => $this->t('Use template "@path" to render block', [
-        '@path' => $plugin->getTemplatePath(),
+        '@path' => $this->getPluginInstance()->getTemplatePath(),
       ]),
     ];
 
@@ -58,14 +54,22 @@ final class ShowcaseBlock extends BlockBase implements ContainerFactoryPluginInt
    * {@inheritdoc}
    */
   public function build(): array {
-    $id = str_replace('showcase_block:', '', $this->getPluginId());
-    /** @var \Drupal\showcase\ShowcasePluginInterface $plugin */
+    $build['content'] = $this
+      ->getPluginInstance()
+      ->build();
+
+    return $build;
+  }
+
+  public function getPluginInstance(): ShowcasePluginInterface {
+    $id = \str_replace('showcase_block:', '', $this->getPluginId());
     $plugin = $this
       ->pluginManagerShowcase
       ->createInstance($id);
-    $build['content'] = $plugin->build();
 
-    return $build;
+    \assert($plugin instanceof ShowcasePluginInterface);
+
+    return $plugin;
   }
 
 }

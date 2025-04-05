@@ -5,7 +5,7 @@ namespace Drupal\Tests\showcase\Functional;
 use Drupal\Tests\block\Traits\BlockCreationTrait;
 use Drupal\Tests\BrowserTestBase;
 
-class PluginRenderTest extends BrowserTestBase {
+final class PluginRenderTest extends BrowserTestBase {
 
   use BlockCreationTrait {
     placeBlock as drupalPlaceBlock;
@@ -29,7 +29,7 @@ class PluginRenderTest extends BrowserTestBase {
 
     $this
       ->drupalPlaceBlock('showcase_block:showcase_example::showcase-example-block.html.twig', [
-        'region' => 'header'
+        'region' => 'header',
       ]);
   }
 

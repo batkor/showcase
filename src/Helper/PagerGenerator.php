@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\showcase\Helper;
 
 /**
  * The helper object for generate pagination.
  */
-class PagerGenerator {
+final class PagerGenerator {
 
   private int $first;
 
@@ -18,7 +20,7 @@ class PagerGenerator {
   public function __construct(
     private readonly int $total,
     private readonly int $itemsPerPage,
-    private readonly int $current
+    private readonly int $current,
   ) {}
 
   public function setBegin(int $begin): void {
@@ -58,16 +60,16 @@ class PagerGenerator {
       return $this->pages;
     }
 
-    $middle = (int) ceil($this->itemsPerPage / 2);
-    $this->first = max($this->begin, $this->current - $middle + 1);
+    $middle = (int) \ceil($this->itemsPerPage / 2);
+    $this->first = \max($this->begin, $this->current - $middle + 1);
     $this->last = $this->itemsPerPage + $this->first - 1;
 
     if ($this->last >= $this->total) {
-      $this->first = max($this->begin, $this->total - $this->itemsPerPage + 1);
-      $this->last = min($this->total, $this->itemsPerPage + $this->first - 1);
+      $this->first = \max($this->begin, $this->total - $this->itemsPerPage + 1);
+      $this->last = \min($this->total, $this->itemsPerPage + $this->first - 1);
     }
 
-    $this->pages = range($this->first, $this->last);
+    $this->pages = \range($this->first, $this->last);
 
     return $this->pages;
   }

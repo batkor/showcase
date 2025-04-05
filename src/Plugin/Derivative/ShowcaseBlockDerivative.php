@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\showcase\Plugin\Derivative;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
-use Drupal\Component\Utility\Html;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\showcase\ShowcasePluginInterface;
 use Drupal\showcase\ShowcasePluginManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -15,14 +15,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @see \Drupal\showcase\Plugin\Block\ShowcaseBlock
  */
-class ShowcaseBlockDerivative extends DeriverBase implements ContainerDeriverInterface {
+final class ShowcaseBlockDerivative extends DeriverBase implements ContainerDeriverInterface {
 
   /**
    * Constructs.
    */
   public function __construct(
     protected readonly string $basePluginId,
-    protected readonly ?ShowcasePluginManager $pluginManagerShowcase
+    protected readonly ?ShowcasePluginManager $pluginManagerShowcase,
   ) {}
 
   /**
@@ -31,7 +31,7 @@ class ShowcaseBlockDerivative extends DeriverBase implements ContainerDeriverInt
   public static function create(ContainerInterface $container, $base_plugin_id) {
     return new static(
       $base_plugin_id,
-      $container->get('plugin.manager.showcase')
+      $container->get('plugin.manager.showcase'),
     );
   }
 
@@ -44,10 +44,12 @@ class ShowcaseBlockDerivative extends DeriverBase implements ContainerDeriverInt
         continue;
       }
 
-      /** @var \Drupal\showcase\ShowcasePluginInterface $plugin */
       $plugin = $this
         ->pluginManagerShowcase
         ->createInstance($def['id']);
+
+      \assert($plugin instanceof ShowcasePluginInterface);
+
       $this->derivatives[$def['id']] = [
         'category' => 'Showcase',
         'admin_label' => $plugin->label(),

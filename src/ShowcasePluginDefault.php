@@ -40,8 +40,8 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $static = new static($configuration, $plugin_id, $plugin_definition);
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+    $static = new self($configuration, $plugin_id, $plugin_definition);
     $static->root = $container->getParameter('app.root');
     $static->callableResolver = $container->get('callable_resolver');
     $static->argumentResolver = $container->get('http_kernel.controller.argument_resolver');
@@ -60,7 +60,7 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
 
     return (string) new TranslatableMarkup('Template: @template', [
       '@provider' => $this->getPluginDefinition()['provider'] ?? '',
-      '@template' => '.../' . basename($this->getTemplatePath()),
+      '@template' => '.../' . \basename($this->getTemplatePath()),
     ]);
   }
 
@@ -100,8 +100,8 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
       'theme_hook_original' => 'NOT USE HOOK',
       'directory' => $this->getProviderDirectory(),
     ];
-    template_preprocess($variables, NULL, []);
-    $path = ltrim($this->getTemplatePath(), DIRECTORY_SEPARATOR);
+    \template_preprocess($variables, NULL, []);
+    $path = \ltrim($this->getTemplatePath(), \DIRECTORY_SEPARATOR);
 
     return (string) \twig_render_template($path, $variables);
   }
@@ -112,7 +112,7 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
   public function getVariables(): array {
     $data = $this->getPluginDefinition()['data'];
 
-    if (is_array($data)) {
+    if (\is_array($data)) {
       return $data;
     }
 
@@ -120,14 +120,14 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
       $dataCallable = $this->callableResolver->getCallableFromDefinition($data);
     }
     catch (\InvalidArgumentException $e) {
-      throw new \InvalidArgumentException(sprintf('Not callable data on plugin %s', $this->getPluginId()), 0, $e);
+      throw new \InvalidArgumentException(\sprintf('Not callable data on plugin %s', $this->getPluginId()), 0, $e);
     }
 
-    if (\is_array($dataCallable) && method_exists(...$dataCallable)) {
+    if (\is_array($dataCallable) && \method_exists(...$dataCallable)) {
       $controllerReflector = new \ReflectionMethod(...$dataCallable);
     }
-    elseif (\is_string($dataCallable) && str_contains($dataCallable, '::')) {
-      $controllerReflector = new \ReflectionMethod(...explode('::', $dataCallable, 2));
+    elseif (\is_string($dataCallable) && \str_contains($dataCallable, '::')) {
+      $controllerReflector = new \ReflectionMethod(...\explode('::', $dataCallable, 2));
     }
     else {
       $controllerReflector = new \ReflectionFunction($dataCallable(...));
@@ -170,7 +170,7 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
    * {@inheritdoc}
    */
   public function getTemplateDirectory(): string {
-    return str_replace($this->root, '', $this->getPluginDefinition()['template_directory']);
+    return \str_replace($this->root, '', $this->getPluginDefinition()['template_directory']);
   }
 
   /**
