@@ -29,8 +29,8 @@ services:
     tags:
       - { name: event_subscriber }
 
-  showcase.variable.event_subscriber:
-    class: Drupal\showcase\EventSubscriber\ShowcaseVariable
+  showcase.array_variable.event_subscriber:
+    class: Drupal\showcase\EventSubscriber\ShowcaseArrayVariable
     tags:
       - { name: event_subscriber }
 

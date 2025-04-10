@@ -7,7 +7,7 @@ namespace Drupal\showcase\EventSubscriber;
 use Drupal\showcase\Event\ShowcasePrepareVariableEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class ShowcaseVariable implements EventSubscriberInterface {
+final class ShowcaseArrayVariable implements EventSubscriberInterface {
 
   /**
    * {@inheritdoc}
@@ -22,6 +22,10 @@ final class ShowcaseVariable implements EventSubscriberInterface {
     $data = $event
       ->getPlugin()
       ->getPluginDefinition()['data'];
+
+    if (!\is_array($data)) {
+      return;
+    }
 
     $event->setVariables($data);
   }
