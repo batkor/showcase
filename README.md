@@ -80,6 +80,40 @@ For more information, see `showcase_example` module.
 | `jss`          | The paths list to .js file for attach into a plugin. Not working if enabled html key.                                               |
 
 
+### Feature 'html' options.
+If exists `"html": true` option you can add
+drupal "placeholders".
+
+Example:
+
+```
+{#---
+  {
+    "path": "/my-example-page",
+    "data": {
+      "title": "showcase_example title",
+      "text": "showcase_example html"
+    },
+    "html": true
+  }
+---#}
+{{ attach_library('core/drupal') }}
+<html>
+  <head>
+    <head-placeholder token="{{ placeholder_token }}">
+    <title>{{ data.title }}</title>
+    <css-placeholder token="{{ placeholder_token }}">
+    <js-placeholder token="{{ placeholder_token }}">
+  </head>
+  <body>
+    <div class="showcase_example-path">
+      {{ data.text }}
+    </div>
+    <js-bottom-placeholder token="{{ placeholder_token }}">
+  </body>
+</html>
+```
+
 ## Extra settings
 
 ### Management environment.

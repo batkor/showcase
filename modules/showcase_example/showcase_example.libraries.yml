@@ -1,0 +1,8 @@
+main:
+  js:
+    assets/main.js:
+  css:
+    component:
+      assets/main.css: {}
+  dependencies:
+    - core/jquery

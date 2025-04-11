@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\showcase;
 
+use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -19,6 +20,8 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
   protected string $root;
 
   protected ?EventDispatcherInterface $eventDispatcher;
+
+  protected string $placeholderToken;
 
   /**
    * {@inheritdoc}
@@ -56,7 +59,7 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
    * {@inheritdoc}
    */
   public function build(): array {
-    return [
+    $build = [
       '#type' => 'inline_template',
       '#template' => '{{ value|raw }}',
       '#context' => [
@@ -68,6 +71,22 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
         ],
       ],
     ];
+
+    if ($this->isHtml()) {
+      $types = [
+        'styles' => 'css',
+        'scripts' => 'js',
+        'scripts_bottom' => 'js-bottom',
+        'head' => 'head',
+      ];
+
+      foreach ($types as $type => $name) {
+        $placeholder = '<' . $name . '-placeholder token="' . $this->getPlaceholderToken() . '">';
+        $build['#attached']['html_response_attachment_placeholders'][$type] = $placeholder;
+      }
+    }
+
+    return $build;
   }
 
   /**
@@ -81,6 +100,11 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
       'theme_hook_original' => 'NOT USE HOOK',
       'directory' => $this->getProviderDirectory(),
     ];
+
+    if ($this->isHtml()) {
+      $variables['placeholder_token'] = $this->getPlaceholderToken();
+    }
+
     \template_preprocess($variables, NULL, []);
     $path = \ltrim($this->getTemplatePath(), \DIRECTORY_SEPARATOR);
 
@@ -135,6 +159,16 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
    */
   public function getProviderDirectory(): string {
     return $this->getPluginDefinition()['provider_directory'];
+  }
+
+  public function getPlaceholderToken(): string {
+    if (isset($this->placeholderToken)) {
+      return $this->placeholderToken;
+    }
+
+    $this->placeholderToken = Crypt::randomBytesBase64(55);
+
+    return $this->placeholderToken;
   }
 
 }
