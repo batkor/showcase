@@ -83,6 +83,7 @@ For more information, see `showcase_example` module.
 ### Feature 'html' options.
 If exists `"html": true` option you can add
 drupal "placeholders".
+`head-placeholder` most likely you won't need
 
 Example:
 
