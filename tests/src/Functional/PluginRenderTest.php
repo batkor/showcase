@@ -39,6 +39,9 @@ final class PluginRenderTest extends BrowserTestBase {
   public function testRoutePlugin(): void {
     $this->drupalGet('/example/twig');
     $this->assertSession()->responseContains('showcase_example path');
+    // Check attach assets files.
+    $this->assertSession()->responseContains('assets/showcase_example/path.css');
+    $this->assertSession()->responseContains('bootstrap@5.0.2/dist/css/bootstrap.min.css');
   }
 
   /**
