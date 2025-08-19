@@ -119,7 +119,8 @@ final class ShowcaseRouteSubscriber implements EventSubscriberInterface {
       ];
 
       $route = new Route($def['path'], $defaults, $requirements, $options);
-      $collection->add($id, $route);
+      $name = \preg_replace('/[-.:?*<>"\'\/\\\\]/', '_', $id);
+      $collection->add($name, $route);
     }
   }
 

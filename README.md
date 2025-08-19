@@ -64,6 +64,16 @@ Key `data` support callable strings
 </div>
 ```
 
+You can add `#cache` key on `data` property
+```php #\Drupal\showcase_example\Showcase\ShowcaseExample
+  return [
+    'text' => 'ShowcaseExample callable',
+    '#cache' => [
+      'contexts' => ['session'],
+    ],
+  ];
+```
+
 For more information, see `showcase_example` module.
 
 ## All settings

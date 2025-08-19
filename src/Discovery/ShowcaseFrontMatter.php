@@ -11,7 +11,7 @@ use Drupal\Component\Serialization\Json;
  */
 final class ShowcaseFrontMatter {
 
-  public const REGEXP = '/\A({#---(.*?)?\R---#})/s';
+  public const string REGEXP = '/\A({#---(.*?)?\R---#})/s';
 
   /**
    * The parse result.

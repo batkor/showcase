@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\showcase;
 
 use Drupal\Component\Utility\Crypt;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -22,6 +23,8 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
   protected ?EventDispatcherInterface $eventDispatcher;
 
   protected string $placeholderToken;
+
+  protected ?CacheableMetadata $cacheableMetadata;
 
   /**
    * {@inheritdoc}
@@ -86,6 +89,8 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
       }
     }
 
+    $this->cacheableMetadata->applyTo($build);
+
     return $build;
   }
 
@@ -100,6 +105,8 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
       'theme_hook_original' => 'NOT USE HOOK',
       'directory' => $this->getProviderDirectory(),
     ];
+
+    $this->cacheableMetadata = CacheableMetadata::createFromRenderArray($variables['data']);
 
     if ($this->isHtml()) {
       $variables['placeholder_token'] = $this->getPlaceholderToken();
