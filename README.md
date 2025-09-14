@@ -89,6 +89,7 @@ For more information, see `showcase_example` module.
 | `requirements` | The route requirements.                                                                                                             |
 | `access`       | The access to plugin. Override access to route.                                                                                     |
 | `data`         | The list variables available in template or callable string.                                                                        |
+| `cache`        | The array contains cache feature: tags, contexts, max-age.                                                                          |
 | `css`          | The paths list to .css file for attach into a plugin. Not working if enabled html key.                                              |
 | `jss`          | The paths list to .js file for attach into a plugin. Not working if enabled html key.                                               |
 

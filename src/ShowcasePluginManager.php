@@ -65,6 +65,8 @@ final class ShowcasePluginManager extends DefaultPluginManager {
     'css' => [],
     // The paths list to .js file for attach into a plugin.
     'js' => [],
+    // The array contains cache feature: tags, contexts, max-age.
+    'cache' => [],
   ];
 
   /**

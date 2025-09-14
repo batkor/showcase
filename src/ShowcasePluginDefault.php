@@ -89,6 +89,11 @@ final class ShowcasePluginDefault extends PluginBase implements ShowcasePluginIn
       }
     }
 
+    $this->cacheableMetadata = $this
+      ->cacheableMetadata
+      ->merge(CacheableMetadata::createFromRenderArray([
+        '#cache' => $this->getPluginDefinition()['cache'] ?? [],
+      ]));
     $this->cacheableMetadata->applyTo($build);
 
     return $build;
