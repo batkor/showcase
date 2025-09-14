@@ -34,6 +34,14 @@ services:
     tags:
       - { name: event_subscriber }
 
+  showcase.default_variable.event_subscriber:
+    class: Drupal\showcase\EventSubscriber\ShowcaseDefaultVariable
+    arguments:
+      - '@current_route_match'
+      - '@request_stack'
+    tags:
+      - { name: event_subscriber }
+
   twig.loader.showcase:
     public: false
     class: Drupal\showcase\ShowcaseTwigLoader

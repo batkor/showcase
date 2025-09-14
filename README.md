@@ -64,6 +64,9 @@ Key `data` support callable strings
 </div>
 ```
 
+### Default values contains on `data` property.
+Property contains route parameters and query parameters on `data.query` path.
+
 You can add `#cache` key on `data` property
 ```php #\Drupal\showcase_example\Showcase\ShowcaseExample
   return [

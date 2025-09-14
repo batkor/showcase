@@ -3,3 +3,4 @@ type: module
 description: 'Provides functional for fast development project.'
 package: Showcase
 core_version_requirement: ^10.2
+php: 8.3

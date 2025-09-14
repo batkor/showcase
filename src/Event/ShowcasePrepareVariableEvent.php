@@ -27,4 +27,8 @@ final class ShowcasePrepareVariableEvent extends Event {
     $this->variables = $variables;
   }
 
+  public function addVariable(string $key, $value): void {
+    $this->variables[$key] = $value;
+  }
+
 }
