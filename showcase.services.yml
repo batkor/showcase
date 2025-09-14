@@ -42,6 +42,14 @@ services:
     tags:
       - { name: event_subscriber }
 
+  showcase.file_variable.event_subscriber:
+    class: Drupal\showcase\EventSubscriber\ShowcaseFileVariable
+    arguments:
+      - '%app.root'
+      - '@request_stack'
+    tags:
+      - { name: event_subscriber }
+
   twig.loader.showcase:
     public: false
     class: Drupal\showcase\ShowcaseTwigLoader

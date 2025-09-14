@@ -1,0 +1,16 @@
+{#---
+  {
+    "path": "/example/json-file",
+    "data": "example-data.json"
+  }
+---#}
+
+<div>
+  Json file contains next values.<br>
+  {% for key, value in data %}
+    <div>
+      {{ key }}:{{ value }}<br>
+    </div>
+  {% endfor %}
+
+</div>

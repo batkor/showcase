@@ -64,10 +64,15 @@ Key `data` support callable strings
 </div>
 ```
 
+Key `data` support paths to Json or Yaml file.
+See `modules/showcase_example/templates/showcase-example-yaml-file.html.twig` template
+
 ### Default values contains on `data` property.
 Property contains route parameters and query parameters on `data.query` path.
 
-You can add `#cache` key on `data` property
+## Support cache.
+You can add `#cache` key on `data` property,
+on callback handler or add `cache` property
 ```php #\Drupal\showcase_example\Showcase\ShowcaseExample
   return [
     'text' => 'ShowcaseExample callable',

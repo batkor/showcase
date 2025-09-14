@@ -1,0 +1,16 @@
+{#---
+  {
+    "path": "/example/yaml-file",
+    "data": "example-data.yml"
+  }
+---#}
+
+<div>
+  Yaml file contains next values.<br>
+  {% for key, value in data %}
+    <div>
+      {{ key }}:{{ value }}<br>
+    </div>
+  {% endfor %}
+
+</div>
